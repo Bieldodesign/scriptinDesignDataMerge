@@ -10,7 +10,7 @@ if (app.documents.length == 0) {
         var dataMerge = app.activeDocument.dataMergeProperties;
 
         // Verificando se a fonte de dados está vinculada
-        if (!dataMerge.mergeProperties.linked) {
+        if (!dataMerge.linked) {
             alert("Por favor, vincule um arquivo de fonte de dados e tente novamente.");
             exit();
         }
@@ -22,12 +22,12 @@ if (app.documents.length == 0) {
         }
 
         // Iterando através dos registros
-        for (var i = 0; i < dataMerge.mergeProperties.recordCount; i++) {
+        for (var i = 0; i < dataMerge.recordCount; i++) {
             // Configurando o registro atual
-            dataMerge.mergeProperties.mergeRecords(i);
+            dataMerge.mergeRecords(i);
 
             // Pegando o valor do campo de dados mesclados (quinta coluna)
-            var fieldValue = dataMerge.mergeProperties.recordSet[i].record(4);
+            var fieldValue = dataMerge.recordSet[i].record(4);
 
             // Dividindo o valor do campo em caracteres
             var digits = fieldValue.toString().split("");
