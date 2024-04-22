@@ -3,22 +3,34 @@ if (app.documents.length == 0) {
     alert("Por favor, abra um documento no InDesign e tente novamente.");
 } else {
     // Verificando se há uma fonte de dados
-    if (app.activeDocument.dataMergeProperties.dataMergePreferences.dataMergeResource == null) {
+    if (app.activeDocument.dataMergeProperties == null) {
         alert("Por favor, vincule um arquivo de fonte de dados e tente novamente.");
     } else {
         // Inicializando o objeto de origem de dados
-        var dataMerge = app.activeDocument.dataMergeProperties.dataMergePreferences.dataMergeResource;
+        var dataMerge = app.activeDocument.dataMergeProperties;
+
+        // Verificando se a fonte de dados está vinculada
+        if (!dataMerge.linked) {
+            alert("Por favor, vincule um arquivo de fonte de dados e tente novamente.");
+            exit();
+        }
+
+        // Verificando se a fonte de dados está carregada
+        if (!dataMerge.dataSource.isValid) {
+            alert("A fonte de dados não está carregada. Por favor, carregue a fonte de dados e tente novamente.");
+            exit();
+        }
 
         // Iterando através dos registros
         for (var i = 0; i < dataMerge.recordCount; i++) {
             // Configurando o registro atual
             dataMerge.mergeRecords(i);
 
-            // Pegando o valor do campo de dados mesclados
-            var fieldValue = dataMerge.recordAsText().contents;
+            // Pegando o valor do campo de dados mesclados (quinta coluna)
+            var fieldValue = dataMerge.recordSet[i].record(4);
 
             // Dividindo o valor do campo em caracteres
-            var digits = fieldValue.split("");
+            var digits = fieldValue.toString().split("");
 
             // Verificando se o campo tem 11 caracteres
             if (digits.length !== 11) {
